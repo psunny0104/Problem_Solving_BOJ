@@ -24,14 +24,18 @@ int dy[] = { 1, -1, 0 ,0 };//4방향 이동을 위한 배열
 int bfs()
 {
 	queue<pair<int, int>> q;
-	for (int i = 0; i < vrs_act_all.size(); i++) { //큐에 선택한 활성화 바이러스를 모두 넣고 bfs 시작
+	//큐에 선택한 활성화 바이러스를 모두 넣고 bfs 시작
+	for (int i = 0; i < vrs_act_all.size(); i++) {
 		int act_y = vrs_act_all[i].first;
 		int act_x = vrs_act_all[i].second;
 		q.push(make_pair(act_y, act_x));
-		chk[act_y][act_x] = 1; //초기값을 1로 시작하므로, 답에서 1을 나중에 빼줘야 함
+		//초기값을 1로 시작하므로, 답에서 1을 나중에 빼줘야 함
+		chk[act_y][act_x] = 1;
 	}
-	int tmp_cnt = 0; //이번 지도에서 바이러스가 된 빈 칸의 개수를 세고 원래 빈 칸의 개수와 비교
-	int max_val = 0; //이번 지도에서 빈 칸이 바이러스가 되는데 가장 오래 걸린 시간을 저장
+	//이번 지도에서 바이러스가 된 빈 칸의 개수를 세고 원래 빈 칸의 개수와 비교
+	int tmp_cnt = 0; 
+	//이번 지도에서 빈 칸이 바이러스가 되는데 가장 오래 걸린 시간을 저장
+	int max_val = 0; 
 
 	while (!q.empty()) {
 		int y = q.front().first;
@@ -47,10 +51,11 @@ int bfs()
 
 			if (chk[ny][nx] != 0)
 				continue;
-
-			if (map[ny][nx] == 0 || map[ny][nx] == 2) {//빈 칸이거나 비활성화 바이러스이면 거리를 갱신
+			//빈 칸이거나 비활성화 바이러스이면 거리를 갱신
+			if (map[ny][nx] == 0 || map[ny][nx] == 2) {
 				chk[ny][nx] = chk[y][x] + 1;
-				if (map[ny][nx] == 0) { //빈 칸인경우 카운트하고, 해당 시간이 이전에 저장된 시간보다 크면 max_val 갱신
+				//빈 칸인경우 카운트하고, 해당 시간이 이전에 저장된 시간보다 크면 max_val 갱신
+				if (map[ny][nx] == 0) { 
 					tmp_cnt++;
 					if (chk[ny][nx] > max_val) {
 						max_val = chk[ny][nx];
@@ -60,20 +65,23 @@ int bfs()
 			}
 		}
 	}
-
-	if (cnt != tmp_cnt) //빈 칸이 모두 바이러스가 되지 않았으면 -1 리턴
+	//빈 칸이 모두 바이러스가 되지 않았으면 -1 리턴
+	if (cnt != tmp_cnt) 
 		return -1;
-	
-	return max_val - 1; //바이러스가 되는데 가장 오래 걸린 시간을 리턴, 처음 시작 시간을 1로 했으므로 -1 해줌
+	//바이러스가 되는데 가장 오래 걸린 시간을 리턴, 처음 시작 시간을 1로 했으므로 -1 해줌
+	return max_val - 1;
 }
 
-void cmb(int idx, int cnt) //idx = 시작점, cnt = 고른 개수
+//idx = 시작점, cnt = 고른 개수
+void cmb(int idx, int cnt) 
 {
-	if (cnt == M) { //고른 원소의 개수가 조합을 통해 고르려는 원소의 개수와 같으면 bfs를 통해 바이러스 퍼트림
+	//고른 원소의 개수가 조합을 통해 고르려는 원소의 개수와 같으면 bfs를 통해 바이러스 퍼트림
+	if (cnt == M) { 
 		vrs_act_all.clear(); //활성화 바이러스 리스트 벡터 초기화
 		memset(chk, 0, sizeof(chk)); //거리 계산 배열 초기화
 
-		for (int i = 0; i < vrs_list_all.size(); i++) { //활성화 바이러스 리스트에 고른 바이러스를 넣어줌
+		//활성화 바이러스 리스트에 고른 바이러스를 넣어줌
+		for (int i = 0; i < vrs_list_all.size(); i++) {
 			if (selected[i] == true) {
 				int act_y = vrs_list_all[i].first;
 				int act_x = vrs_list_all[i].second;
@@ -81,13 +89,14 @@ void cmb(int idx, int cnt) //idx = 시작점, cnt = 고른 개수
 			}
 		}
 		int tmp_ans = bfs(); //bfs를 통한 바이러스 퍼트리기 시작
-
-		if (tmp_ans != -1 && tmp_ans < ans) //빈 칸을 모두 채웠고, 기존의 값보다 작으면 ans 갱신
+		//빈 칸을 모두 채웠고, 기존의 값보다 작으면 ans 갱신
+		if (tmp_ans != -1 && tmp_ans < ans)
 			ans = tmp_ans;
 	
 		return;
 	}
-	for (int i = idx; i < vrs_list_all.size(); i++) { //첫 점을 시작으로 dfs를 통해 조합을 구현함
+	//첫 점을 시작으로 dfs를 통해 조합을 구현함
+	for (int i = idx; i < vrs_list_all.size(); i++) { 
 		if (selected[i] == true)
 			continue;
 		selected[i] = true;
@@ -122,8 +131,9 @@ int main()
 		ans = INF;
 		//dfs를 통해 조합을 구현하여 활성화시킬 바이러스를 고르고 그 안에서 bfs를 실행
 		cmb(0, 0);
-
-		if (ans == INF) //bfs에서 빈 칸을 다 채우지 못할 경우 ans의 값을 바꾸지 않으므로, 그대로 INF이면 -1을 출력
+		//bfs에서 빈 칸을 다 채우지 못할 경우 ans의 값을 바꾸지 않으므로 
+		//그대로 INF이면 -1을 출력
+		if (ans == INF)
 			cout << -1 << "\n";
 		else
 			cout << ans << "\n";
