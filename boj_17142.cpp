@@ -1,40 +1,40 @@
 //	@date 2019/09/03
 //	@author psunny0104
-//	@brief boj_17142_¿¬±¸¼Ò 3
+//	@brief boj_17142_ì—°êµ¬ì†Œ 3
 
 #include <iostream>
 #include <queue>
 #include <vector>
 #include <algorithm>
 #include <cstring>
-#define INF 987654321 //ÃÖ¼Ú°ªÀ» Ã£±â À§ÇØ ans °ªÀ» ÃÊ±âÈ­ÇÏ±â À§ÇÑ INF
+#define INF 987654321 //ìµœì†Ÿê°’ì„ ì°¾ê¸° ìœ„í•´ ans ê°’ì„ ì´ˆê¸°í™”í•˜ê¸° ìœ„í•œ INF
 using namespace std;
 
 int N, M, ans, cnt;
-int map[51][51];//ºó Ä­=0, º®=1, ¹ÙÀÌ·¯½º=2
-int chk[51][51];//bfs ¹æ¹®¿©ºÎ ¹× °Å¸® °è»ê
+int map[51][51];//ë¹ˆ ì¹¸=0, ë²½=1, ë°”ì´ëŸ¬ìŠ¤=2
+int chk[51][51];//bfs ë°©ë¬¸ì—¬ë¶€ ë° ê±°ë¦¬ ê³„ì‚°
 
-vector<pair<int, int>> vrs_list_all; //ÁÖ¾îÁø ÀÔ·ÂÀÇ ¸ðµç ¹ÙÀÌ·¯½º ¸®½ºÆ®
-vector<pair<int, int>> vrs_act_all;  //Á¶ÇÕÀ» ÅëÇØ ±¸ÇØÁø È°¼ºÈ­µÈ ¹ÙÀÌ·¯½º ¸®½ºÆ®
-bool selected[10]; //Á¶ÇÕ °è»êÀ» À§ÇÑ ¹è¿­
+vector<pair<int, int>> vrs_list_all; //ì£¼ì–´ì§„ ìž…ë ¥ì˜ ëª¨ë“  ë°”ì´ëŸ¬ìŠ¤ ë¦¬ìŠ¤íŠ¸
+vector<pair<int, int>> vrs_act_all;  //ì¡°í•©ì„ í†µí•´ êµ¬í•´ì§„ í™œì„±í™”ëœ ë°”ì´ëŸ¬ìŠ¤ ë¦¬ìŠ¤íŠ¸
+bool selected[10]; //ì¡°í•© ê³„ì‚°ì„ ìœ„í•œ ë°°ì—´
 
-int dx[] = { 0, 0, 1, -1 }; //4¹æÇâ ÀÌµ¿À» À§ÇÑ ¹è¿­
-int dy[] = { 1, -1, 0 ,0 };//4¹æÇâ ÀÌµ¿À» À§ÇÑ ¹è¿­
+int dx[] = { 0, 0, 1, -1 }; //4ë°©í–¥ ì´ë™ì„ ìœ„í•œ ë°°ì—´
+int dy[] = { 1, -1, 0 ,0 };//4ë°©í–¥ ì´ë™ì„ ìœ„í•œ ë°°ì—´
 
 int bfs()
 {
 	queue<pair<int, int>> q;
-	//Å¥¿¡ ¼±ÅÃÇÑ È°¼ºÈ­ ¹ÙÀÌ·¯½º¸¦ ¸ðµÎ ³Ö°í bfs ½ÃÀÛ
+	//íì— ì„ íƒí•œ í™œì„±í™” ë°”ì´ëŸ¬ìŠ¤ë¥¼ ëª¨ë‘ ë„£ê³  bfs ì‹œìž‘
 	for (int i = 0; i < vrs_act_all.size(); i++) {
 		int act_y = vrs_act_all[i].first;
 		int act_x = vrs_act_all[i].second;
 		q.push(make_pair(act_y, act_x));
-		//ÃÊ±â°ªÀ» 1·Î ½ÃÀÛÇÏ¹Ç·Î, ´ä¿¡¼­ 1À» ³ªÁß¿¡ »©Áà¾ß ÇÔ
+		//ì´ˆê¸°ê°’ì„ 1ë¡œ ì‹œìž‘í•˜ë¯€ë¡œ, ë‹µì—ì„œ 1ì„ ë‚˜ì¤‘ì— ë¹¼ì¤˜ì•¼ í•¨
 		chk[act_y][act_x] = 1;
 	}
-	//ÀÌ¹ø Áöµµ¿¡¼­ ¹ÙÀÌ·¯½º°¡ µÈ ºó Ä­ÀÇ °³¼ö¸¦ ¼¼°í ¿ø·¡ ºó Ä­ÀÇ °³¼ö¿Í ºñ±³
+	//ì´ë²ˆ ì§€ë„ì—ì„œ ë°”ì´ëŸ¬ìŠ¤ê°€ ëœ ë¹ˆ ì¹¸ì˜ ê°œìˆ˜ë¥¼ ì„¸ê³  ì›ëž˜ ë¹ˆ ì¹¸ì˜ ê°œìˆ˜ì™€ ë¹„êµ
 	int tmp_cnt = 0; 
-	//ÀÌ¹ø Áöµµ¿¡¼­ ºó Ä­ÀÌ ¹ÙÀÌ·¯½º°¡ µÇ´Âµ¥ °¡Àå ¿À·¡ °É¸° ½Ã°£À» ÀúÀå
+	//ì´ë²ˆ ì§€ë„ì—ì„œ ë¹ˆ ì¹¸ì´ ë°”ì´ëŸ¬ìŠ¤ê°€ ë˜ëŠ”ë° ê°€ìž¥ ì˜¤ëž˜ ê±¸ë¦° ì‹œê°„ì„ ì €ìž¥
 	int max_val = 0; 
 
 	while (!q.empty()) {
@@ -51,10 +51,10 @@ int bfs()
 
 			if (chk[ny][nx] != 0)
 				continue;
-			//ºó Ä­ÀÌ°Å³ª ºñÈ°¼ºÈ­ ¹ÙÀÌ·¯½ºÀÌ¸é °Å¸®¸¦ °»½Å
+			//ë¹ˆ ì¹¸ì´ê±°ë‚˜ ë¹„í™œì„±í™” ë°”ì´ëŸ¬ìŠ¤ì´ë©´ ê±°ë¦¬ë¥¼ ê°±ì‹ 
 			if (map[ny][nx] == 0 || map[ny][nx] == 2) {
 				chk[ny][nx] = chk[y][x] + 1;
-				//ºó Ä­ÀÎ°æ¿ì Ä«¿îÆ®ÇÏ°í, ÇØ´ç ½Ã°£ÀÌ ÀÌÀü¿¡ ÀúÀåµÈ ½Ã°£º¸´Ù Å©¸é max_val °»½Å
+				//ë¹ˆ ì¹¸ì¸ê²½ìš° ì¹´ìš´íŠ¸í•˜ê³ , í•´ë‹¹ ì‹œê°„ì´ ì´ì „ì— ì €ìž¥ëœ ì‹œê°„ë³´ë‹¤ í¬ë©´ max_val ê°±ì‹ 
 				if (map[ny][nx] == 0) { 
 					tmp_cnt++;
 					if (chk[ny][nx] > max_val) {
@@ -65,22 +65,22 @@ int bfs()
 			}
 		}
 	}
-	//ºó Ä­ÀÌ ¸ðµÎ ¹ÙÀÌ·¯½º°¡ µÇÁö ¾Ê¾ÒÀ¸¸é -1 ¸®ÅÏ
+	//ë¹ˆ ì¹¸ì´ ëª¨ë‘ ë°”ì´ëŸ¬ìŠ¤ê°€ ë˜ì§€ ì•Šì•˜ìœ¼ë©´ -1 ë¦¬í„´
 	if (cnt != tmp_cnt) 
 		return -1;
-	//¹ÙÀÌ·¯½º°¡ µÇ´Âµ¥ °¡Àå ¿À·¡ °É¸° ½Ã°£À» ¸®ÅÏ, Ã³À½ ½ÃÀÛ ½Ã°£À» 1·Î ÇßÀ¸¹Ç·Î -1 ÇØÁÜ
+	//ë°”ì´ëŸ¬ìŠ¤ê°€ ë˜ëŠ”ë° ê°€ìž¥ ì˜¤ëž˜ ê±¸ë¦° ì‹œê°„ì„ ë¦¬í„´, ì²˜ìŒ ì‹œìž‘ ì‹œê°„ì„ 1ë¡œ í–ˆìœ¼ë¯€ë¡œ -1 í•´ì¤Œ
 	return max_val - 1;
 }
 
-//idx = ½ÃÀÛÁ¡, cnt = °í¸¥ °³¼ö
+//idx = ì‹œìž‘ì , cnt = ê³ ë¥¸ ê°œìˆ˜
 void cmb(int idx, int cnt) 
 {
-	//°í¸¥ ¿ø¼ÒÀÇ °³¼ö°¡ Á¶ÇÕÀ» ÅëÇØ °í¸£·Á´Â ¿ø¼ÒÀÇ °³¼ö¿Í °°À¸¸é bfs¸¦ ÅëÇØ ¹ÙÀÌ·¯½º ÆÛÆ®¸²
+	//ê³ ë¥¸ ì›ì†Œì˜ ê°œìˆ˜ê°€ ì¡°í•©ì„ í†µí•´ ê³ ë¥´ë ¤ëŠ” ì›ì†Œì˜ ê°œìˆ˜ì™€ ê°™ìœ¼ë©´ bfsë¥¼ í†µí•´ ë°”ì´ëŸ¬ìŠ¤ í¼íŠ¸ë¦¼
 	if (cnt == M) { 
-		vrs_act_all.clear(); //È°¼ºÈ­ ¹ÙÀÌ·¯½º ¸®½ºÆ® º¤ÅÍ ÃÊ±âÈ­
-		memset(chk, 0, sizeof(chk)); //°Å¸® °è»ê ¹è¿­ ÃÊ±âÈ­
+		vrs_act_all.clear(); //í™œì„±í™” ë°”ì´ëŸ¬ìŠ¤ ë¦¬ìŠ¤íŠ¸ ë²¡í„° ì´ˆê¸°í™”
+		memset(chk, 0, sizeof(chk)); //ê±°ë¦¬ ê³„ì‚° ë°°ì—´ ì´ˆê¸°í™”
 
-		//È°¼ºÈ­ ¹ÙÀÌ·¯½º ¸®½ºÆ®¿¡ °í¸¥ ¹ÙÀÌ·¯½º¸¦ ³Ö¾îÁÜ
+		//í™œì„±í™” ë°”ì´ëŸ¬ìŠ¤ ë¦¬ìŠ¤íŠ¸ì— ê³ ë¥¸ ë°”ì´ëŸ¬ìŠ¤ë¥¼ ë„£ì–´ì¤Œ
 		for (int i = 0; i < vrs_list_all.size(); i++) {
 			if (selected[i] == true) {
 				int act_y = vrs_list_all[i].first;
@@ -88,21 +88,21 @@ void cmb(int idx, int cnt)
 				vrs_act_all.push_back(make_pair(act_y, act_x));
 			}
 		}
-		int tmp_ans = bfs(); //bfs¸¦ ÅëÇÑ ¹ÙÀÌ·¯½º ÆÛÆ®¸®±â ½ÃÀÛ
-		//ºó Ä­À» ¸ðµÎ Ã¤¿ü°í, ±âÁ¸ÀÇ °ªº¸´Ù ÀÛÀ¸¸é ans °»½Å
+		int tmp_ans = bfs(); //bfsë¥¼ í†µí•œ ë°”ì´ëŸ¬ìŠ¤ í¼íŠ¸ë¦¬ê¸° ì‹œìž‘
+		//ë¹ˆ ì¹¸ì„ ëª¨ë‘ ì±„ì› ê³ , ê¸°ì¡´ì˜ ê°’ë³´ë‹¤ ìž‘ìœ¼ë©´ ans ê°±ì‹ 
 		if (tmp_ans != -1 && tmp_ans < ans)
 			ans = tmp_ans;
 	
 		return;
 	}
-	//Ã¹ Á¡À» ½ÃÀÛÀ¸·Î dfs¸¦ ÅëÇØ Á¶ÇÕÀ» ±¸ÇöÇÔ
+	//ì²« ì ì„ ì‹œìž‘ìœ¼ë¡œ dfsë¥¼ í†µí•´ ì¡°í•©ì„ êµ¬í˜„í•¨
 	for (int i = idx; i < vrs_list_all.size(); i++) { 
 		if (selected[i] == true)
 			continue;
 		selected[i] = true;
 
-		cmb(i, cnt + 1); //dfs¸¦ À§ÇÑ Àç±Í
-		selected[i] = false; //½ÃÀÛÁ¡À¸·Î ÇÑ ¹ø °ñ¶ú´ø °ÍÀº ´Ù½Ã °í¸£Áö ¾ÊÀ½
+		cmb(i, cnt + 1); //dfsë¥¼ ìœ„í•œ ìž¬ê·€
+		selected[i] = false; //ì‹œìž‘ì ìœ¼ë¡œ í•œ ë²ˆ ê³¨ëžë˜ ê²ƒì€ ë‹¤ì‹œ ê³ ë¥´ì§€ ì•ŠìŒ
 	}
 }
 
@@ -115,29 +115,28 @@ int main()
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
 			cin >> map[i][j];
-			if (map[i][j] == 2) { //¹ÙÀÌ·¯½ºÀÎ °æ¿ì µû·Î ¹è¿­¿¡ ÀúÀå
+			if (map[i][j] == 2) { //ë°”ì´ëŸ¬ìŠ¤ì¸ ê²½ìš° ë”°ë¡œ ë°°ì—´ì— ì €ìž¥
 				vrs_list_all.push_back(make_pair(i, j));
 			}
 			else if (map[i][j] == 0)
-				cnt++; // ºó Ä­ÀÇ °³¼ö¸¦ ¼À
+				cnt++; // ë¹ˆ ì¹¸ì˜ ê°œìˆ˜ë¥¼ ì…ˆ
 		}
 	}
 
 	if (cnt == 0) {
-		cout << 0 << "\n"; //ÃÖÃÊ¿¡ ºó Ä­ ¾øÀ¸¸é ´äÀ¸·Î 0 Ãâ·Â
+		cout << 0 << "\n"; //ìµœì´ˆì— ë¹ˆ ì¹¸ ì—†ìœ¼ë©´ ë‹µìœ¼ë¡œ 0 ì¶œë ¥
 		return 0;
 	}
 	else {
 		ans = INF;
-		//dfs¸¦ ÅëÇØ Á¶ÇÕÀ» ±¸ÇöÇÏ¿© È°¼ºÈ­½ÃÅ³ ¹ÙÀÌ·¯½º¸¦ °í¸£°í ±× ¾È¿¡¼­ bfs¸¦ ½ÇÇà
+		//dfsë¥¼ í†µí•´ ì¡°í•©ì„ êµ¬í˜„í•˜ì—¬ í™œì„±í™”ì‹œí‚¬ ë°”ì´ëŸ¬ìŠ¤ë¥¼ ê³ ë¥´ê³  ê·¸ ì•ˆì—ì„œ bfsë¥¼ ì‹¤í–‰
 		cmb(0, 0);
-		//bfs¿¡¼­ ºó Ä­À» ´Ù Ã¤¿ìÁö ¸øÇÒ °æ¿ì ansÀÇ °ªÀ» ¹Ù²ÙÁö ¾ÊÀ¸¹Ç·Î 
-		//±×´ë·Î INFÀÌ¸é -1À» Ãâ·Â
+		//bfsì—ì„œ ë¹ˆ ì¹¸ì„ ë‹¤ ì±„ìš°ì§€ ëª»í•  ê²½ìš° ansì˜ ê°’ì„ ë°”ê¾¸ì§€ ì•Šìœ¼ë¯€ë¡œ 
+		//ê·¸ëŒ€ë¡œ INFì´ë©´ -1ì„ ì¶œë ¥
 		if (ans == INF)
 			cout << -1 << "\n";
 		else
 			cout << ans << "\n";
 	}
-	
 	return 0;
 }
