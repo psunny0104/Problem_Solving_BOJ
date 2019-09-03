@@ -1,5 +1,5 @@
 //	@date 2019/09/03
-//	@author pstar12
+//	@author psunny0104
 //	@brief boj_17142_¿¬±¸¼Ò 3
 
 #include <iostream>
@@ -129,6 +129,5 @@ int main()
 			cout << ans << "\n";
 	}
 	
-
 	return 0;
 }
