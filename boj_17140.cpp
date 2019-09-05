@@ -7,7 +7,6 @@
 #include <cstring>
 #include <algorithm>
 #include <queue>
-#include <functional>
 using namespace std;
 
 int R, C, K; 
@@ -59,8 +58,6 @@ void opr()
 
 			//길이를 100까지 허용하여 숫자와 등장횟수순으로 값 저장
 			for (int j = 1; j <= size_pq*2 - 1; j+=2) {
-				//if (j > 50) //pair이므로 반인 50이 넘으면 남은 값은 버림
-				//	break;
 				map[i][j] = pq.top().second;
 				map[i][j + 1] = pq.top().first;
 				pq.pop();
@@ -90,8 +87,6 @@ void opr()
 			for (int j = 1; j <= cur_r; j++)
 				map[j][i] = 0;
 			for (int j = 1; j <= size_pq * 2 - 1; j += 2) {
-				//if (j > 50)
-				//	break;
 				map[j][i] = pq.top().second;
 				map[j+1][i] = pq.top().first;
 				pq.pop();
