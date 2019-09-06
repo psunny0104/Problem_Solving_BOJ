@@ -15,7 +15,7 @@ struct SK {
 	int y;
 	int x;
 	bool death = true; //false면 죽음
-} sk[100*100+1]; //sk[100*100]...........
+} sk[100 * 100 + 1]; //sk[100*100]...........
 
 int Y, X, M, ans;
 
@@ -44,7 +44,7 @@ int main()
 		for (int i = 1; i <= M; i++) {
 			if (!sk[i].death)
 				continue;
-			
+
 			if (sk[i].x == nsw) {
 				if (idx == 0)
 					idx = i;
@@ -59,75 +59,56 @@ int main()
 			sk[idx].death = false;
 			ans += sk[idx].size;
 		}
-		
-		//위, 아래, 오, 윈
+
 		for (int i = 1; i <= M; i++) {
 			if (!sk[i].death)
 				continue;
 			int step = sk[i].spd;
 			while (1) {
+				if (step == 0)
+					break;
 				if (sk[i].dir == 1) {
-					if (step < sk[i].y - 1) {
+					if (step <= sk[i].y - 1) {
 						sk[i].y -= step;
-						break;
+						step = 0;
 					}
-					else if(step > sk[i].y - 1 ){
+					else {
 						step = step - (sk[i].y - 1);
 						sk[i].y = 1;
 						sk[i].dir = 2;
 					}
-					else if (step == sk[i].y - 1) {
-						sk[i].y = 1;
-						sk[i].dir = 2;
-						break;
-					}
 				}
 				else if (sk[i].dir == 2) {
-					if (step < Y - sk[i].y) {
+					if (step <= Y - sk[i].y) {
 						sk[i].y += step;
-						break;
+						step = 0;
 					}
-					else if(step > Y - sk[i].y) {
+					else {
 						step = step - (Y - sk[i].y);
 						sk[i].y = Y;
 						sk[i].dir = 1;
 					}
-					else if (step == Y - sk[i].y) {
-						sk[i].y = Y;
-						sk[i].dir = 1;
-						break;
-					}
 				}
 				else if (sk[i].dir == 3) {
-					if (step < X - sk[i].x) {
+					if (step <= X - sk[i].x) {
 						sk[i].x += step;
-						break;
+						step = 0;
 					}
-					else if (step > X - sk[i].x) {
+					else {
 						step = step - (X - sk[i].x);
 						sk[i].x = X;
 						sk[i].dir = 4;
 					}
-					else if (step == X - sk[i].x) {
-						sk[i].x = X;
-						sk[i].dir = 4;
-						break;
-					}
 				}
 				else if (sk[i].dir == 4) {
-					if (step < sk[i].x - 1) {
+					if (step <= sk[i].x - 1) {
 						sk[i].x -= step;
-						break;
+						step = 0;
 					}
-					else if (step > sk[i].x - 1) {
+					else {
 						step = step - (sk[i].x - 1);
 						sk[i].x = 1;
 						sk[i].dir = 3;
-					}
-					else if (step == sk[i].x - 1) {
-						sk[i].x = 1;
-						sk[i].dir = 3;
-						break;
 					}
 				}
 			}
