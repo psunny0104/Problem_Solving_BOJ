@@ -1,3 +1,7 @@
+//	@date 2019/09/18
+//	@author psunny0104
+//	@brief boj_10828_╫╨ец
+
 #include <iostream>
 #include <string>
 #define MAX 10000
