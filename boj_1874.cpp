@@ -1,6 +1,6 @@
-//	@date 2019/09/18
+ï»¿//	@date 2019/09/18
 //	@author psunny0104
-//	@brief boj_1874_½ºÅÃ ¼ö¿­
+//	@brief boj_1874_ìŠ¤íƒ ìˆ˜ì—´
 
 #include <iostream>
 #include <stack>
