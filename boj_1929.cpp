@@ -1,4 +1,4 @@
-﻿//	@date 2019/09/04
+﻿//	@date 2019/09/20
 //	@author psunny0104
 //	@brief boj_1929_소수 구하기
 
