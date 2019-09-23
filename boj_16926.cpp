@@ -29,7 +29,6 @@ void rotate()
 	for (int k = 1; k <= num_box; k++) {
 		//그룹 만들기
 		int dist_max = (Y - 2 * k + 1) * 2 + (X - 2 * k + 1) * 2;
-		int dist_num = R / dist_max;
 		int dist_rest = R % dist_max;
 
 		int y_st = k;
