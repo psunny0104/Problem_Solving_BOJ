@@ -1,4 +1,4 @@
-﻿//	@date 2019/10/20
+﻿//	@date 2019/10/21
 //	@author psunny0104
 //	@brief boj_14889_스타트와 링크
 
@@ -7,7 +7,7 @@
 #include <algorithm>
 using namespace std;
 
-int N, M, tg_cnt, tmp_cnt, ans;
+int N, M, ans;
 int rt[21][21];
 bool sltd[21];
 
@@ -30,11 +30,19 @@ void dfs(int idx, int cnt)
 		return;
 	}
 
+	//N까지돌면 절반만, 인덱스+1 가능
+	/*
 	for (int i = idx; i < N; i++) {
 		if (sltd[i])
 			continue;
 		sltd[i] = true;
 		dfs(i, cnt + 1);
+		sltd[i] = false;
+	}
+	*/
+	for (int i = idx; i < N; i++) {
+		sltd[i] = true;
+		dfs(i+1, cnt + 1);
 		sltd[i] = false;
 	}
 }
