@@ -7,7 +7,6 @@ using namespace std;
 
 int one[101][101];
 int two[101][101];
-int rt[101][101];
 int N, M, K;
 
 int main()
@@ -35,14 +34,7 @@ int main()
 			for (int m = 1; m <= M; m++) {
 				tmp += one[i][m] * two[m][k];
 			}
-			rt[i][k] = tmp;
-			tmp = 0;
-		}
-	}
-
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= K; j++) {
-			cout<<rt[i][j]<<' ';
+			cout << tmp << ' ';
 		}
 		cout << '\n';
 	}
