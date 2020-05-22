@@ -341,3 +341,8 @@ healthchecksdb
 /BOJ.sln
 /BOJ.vcxproj
 /BOJ.vcxproj.filters
+
+Debug
+Problem_Solving_BOJ.vcxproj
+Problem_Solving_BOJ.vcxproj.filters
+Problem_solving_BOJ.vcxproj.user
